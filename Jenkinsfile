@@ -46,7 +46,7 @@ spec:
 		stage("Build source"){
 			steps{
 				container("netcoresdk"){
-					print "TODO"
+					  sh('dotnet restore')
 				}
 			}
 		}
