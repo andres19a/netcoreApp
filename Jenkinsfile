@@ -1,9 +1,4 @@
 pipeline{
-	parameters{
-		string(description: "Application Name", name: "appName")
-		string(description: "Registry Secret Name", name: "registrySecretName")
-		string(description: "Kubernetes Config Secret Name", name: "kubeConfigSecretName")
-	}
 	agent{
 		kubernetes{
 			defaultContainer "jnlp"
@@ -34,6 +29,11 @@ spec:
       mountPath: /var/run/docker.sock
 """
 		}
+	}
+	parameters{
+		string(description: "Application Name", name: "appName", value: "netcoreapp")
+		string(description: "Registry Secret Name", name: "registrySecretName", value: "ibmcloud-registry-secret")
+		string(description: "Kubernetes Config Secret Name", name: "kubeConfigSecretName", value: "ibmcloud-secret")
 	}
 	stages{
 		stage("Extract"){
