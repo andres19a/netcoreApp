@@ -53,7 +53,9 @@ spec:
 			steps{
 				container("jnlp"){
 					checkout scm
-					imagetag = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+					script{
+						imagetag = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+					}
 				}
 			}
 		}
