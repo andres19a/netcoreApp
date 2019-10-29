@@ -39,21 +39,21 @@ spec:
 		string(description: "Registry Secret Name", name: "registrySecretName", defaultValue: "ibmcloud-registry-secret")
 		string(description: "Kubernetes Config Secret Name", name: "kubeConfigSecretName", defaultValue: "ibmcloud-secret")
 	}
-	def imagetag
-	def namespace
-	def imagename = params.appName
 	stages{
 		stage("Extract"){
 			steps{
 				container("jnlp"){
 					checkout scm
+					imagetag = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+					imagename = params.appName
+					namespace = "namespacecda"
 				}
 			}
 		}
 		stage("Build source"){
 			steps{
 				container("netcoresdk"){
-					  sh("dotnet restore src && dotnet publish src/ -c Release -o ../out")
+					sh("dotnet restore src && dotnet publish src/ -c Release -o ../out")
 				}
 			}
 		}
@@ -70,8 +70,8 @@ spec:
 		}
 		stage("Commit image"){
 			steps{
-				container("netcoresdk"){
-					print "TODO"
+				container("docker"){
+					sh("docker push us.icr.io/${namespace}/${imagename}:${imagetag}")
 				}
 			}
 		}
