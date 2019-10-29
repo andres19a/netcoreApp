@@ -63,8 +63,8 @@ podTemplate(
         }
         stage('Docker Push'){
             try{
-                container('helm'){
-                    
+                container('docker'){
+					sh("docker push us.icr.io/${namespace}/${imagename}:${imagetag}")
                 }
             }catch(Exception ex){
                 error "Stop Push: " + ex.toString()

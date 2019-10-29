@@ -40,13 +40,18 @@ spec:
 		string(description: "Kubernetes Config Secret Name", name: "kubeConfigSecretName", defaultValue: "ibmcloud-secret")
 	}
 	stages{
+		stage("Prepare"){
+			steps{
+				def namespace = "namespacecda"
+				def imagetag
+				def imagename = params.appName
+			}
+		}
 		stage("Extract"){
 			steps{
 				container("jnlp"){
 					checkout scm
 					imagetag = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
-					imagename = params.appName
-					namespace = "namespacecda"
 				}
 			}
 		}
