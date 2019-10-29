@@ -39,10 +39,10 @@ spec:
 		string(description: "Registry Secret Name", name: "registrySecretName", defaultValue: "ibmcloud-registry-secret")
 		string(description: "Kubernetes Config Secret Name", name: "kubeConfigSecretName", defaultValue: "ibmcloud-secret")
 	}
+	def imagetag
+	def namespace
+	def imagename = params.appName
 	stages{
-		def imagetag
-		def namespace
-		def imagename = params.appName
 		stage("Extract"){
 			steps{
 				container("jnlp"){
