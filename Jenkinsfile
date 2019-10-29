@@ -48,6 +48,9 @@ spec:
 					def imagename = params.appName
 				}
 			}
+			print "Namespace: ${namespace}"
+			print "Image Name: ${imagename}"
+			print "Image Tag: ${imagetag}"
 		}
 		stage("Extract"){
 			steps{
