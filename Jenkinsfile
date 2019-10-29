@@ -31,9 +31,9 @@ spec:
 		}
 	}
 	parameters{
-		string(description: "Application Name", name: "appName", value: "netcoreapp")
-		string(description: "Registry Secret Name", name: "registrySecretName", value: "ibmcloud-registry-secret")
-		string(description: "Kubernetes Config Secret Name", name: "kubeConfigSecretName", value: "ibmcloud-secret")
+		string(description: "Application Name", name: "appName", defaultValue: "netcoreapp")
+		string(description: "Registry Secret Name", name: "registrySecretName", defaultValue: "ibmcloud-registry-secret")
+		string(description: "Kubernetes Config Secret Name", name: "kubeConfigSecretName", defaultValue: "ibmcloud-secret")
 	}
 	stages{
 		stage("Extract"){
