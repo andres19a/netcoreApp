@@ -46,7 +46,7 @@ spec:
 		stage("Build source"){
 			steps{
 				container("netcoresdk"){
-					  sh("dotnet restore src && dotnet publish src/-c Release -o src/out")
+					  sh("dotnet restore src && dotnet publish src/ -c Release -o src/out")
 				}
 			}
 		}
