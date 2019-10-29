@@ -1,7 +1,7 @@
 pipeline{
 	agent{
 		kubernetes{
-			defaultContainer "jnlp"
+			label "netcorebuild"
 			yaml """
 apiVersion: v1
 kind: Pod
