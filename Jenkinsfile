@@ -37,15 +37,11 @@ spec:
 	}
 	stages{
 		stage("Extract"){
-			try{
-				steps{
-					container("jnlp"){
-						checkout scm
-					}
+			steps{
+				container("jnlp"){
+					checkout scm
 				}
-			}catch(Exception ex){
-				error "Failed extract. Reason is: " + ex.toString()
-			}			
+			}
 		}
 		stage("Build source"){}
 		stage("Build image"){}
