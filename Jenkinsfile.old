@@ -1,0 +1,90 @@
+podTemplate(
+    label: 'defaultBuildPodWithDocker',
+    inheritFrom: 'default',
+    serviceAccountName: (env.SERVICE_ACCOUNT_NAME ?: "default").trim(),
+    containers: [
+        containerTemplate(name: 'netcoresdk', image: 'mcr.microsoft.com/dotnet/core/sdk:2.2', ttyEnabled: true, command: 'cat'),
+        containerTemplate(name: 'docker', image: 'docker:18.06.1-ce', ttyEnabled: true, command: 'cat'),
+        containerTemplate(name: 'kubectl', image: 'ibmcom/microclimate-utils:1901', ttyEnabled: true, command: 'cat',
+            envVars: [
+                containerEnvVar(key: 'KUBECONFIG', value: '/kubeconfig/kube-config-wdc07-ibmcloud-kubernetes.yml')
+            ]
+        ),
+        containerTemplate(name: 'helm', image: 'ibmcom/microclimate-k8s-helm:v2.12.3', ttyEnabled: true, command: 'cat',
+            envVars: [
+                containerEnvVar(key: 'KUBECONFIG', value: '/kubeconfig/kube-config-wdc07-ibmcloud-kubernetes.yml')
+            ]
+        ),
+    ],
+    volumes: [
+        hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
+        secretVolume(secretName: 'ibmcloud-secret' , mountPath: '/kubeconfig'),
+        secretVolume(secretName: 'ibmcloud-registry-secret', mountPath: '/dockerconfig'),
+        secretVolume(secretName: 'ibmcloud-helm-secret', mountPath: '/helm')
+    ],
+    podRetention: never(),
+){
+    node('defaultBuildPodWithDocker'){
+        def namespace = "namespacecda"
+        def imagename = "testproject"
+        def imagetag = "latest"
+        stage('Extract'){
+            try{
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/AlexFuentes117/netcoreApp.git']]])
+                imagetag = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+            }catch(Exception ex){
+                //print "Error in Extract:" + ex.toString()
+                error "Error in Extract: " + ex.toString()
+            }
+        }
+        stage('Build'){
+            try{
+                container('netcoresdk'){
+                    sh('dotnet restore')
+                }
+            }catch(Exception ex){
+                //print "Error in Netcore build: " + ex.toString()
+                error "Stop execution: " + ex.toString()
+            }
+        }
+        stage('Docker Build'){
+            try{
+                container('docker'){
+                    print "Image to build: us.icr.io/${namespace}/${imagename}:${imagetag}"
+                    sh "ln -s -f /dockerconfig/.dockerconfigjson /home/jenkins/.dockercfg"
+                    sh "mkdir -p /home/jenkins/.docker"
+                    sh "ln -s -f /dockerconfig/.dockerconfigjson /home/jenkins/.docker/config.json"
+                    sh("docker build -t us.icr.io/${namespace}/${imagename}:${imagetag} .")
+                }
+            }catch(Exception ex){
+                //print "Error in Docker Build: " + ex.toString()
+                error "Stop execution: " + ex.toString()
+            }
+        }
+        stage('Docker Push'){
+            try{
+                container('helm'){
+                    
+                }
+            }catch(Exception ex){
+                error "Stop Push: " + ex.toString()
+            }
+        }
+        stage('Deploy'){
+            try{
+                container('helm'){
+                    sh('helm init --client-only')
+                    //sh('helm ls')
+                    sh('helm create chart')
+                    //sh("helm delete --purge ${imagename}")
+                    //sh("helm install chart/ --replace --name ${imagename} --set-string image.repository=us.icr.io/${namespace}/${imagename},image.tag=${imagetag}")
+                    sh("helm upgrade ${imagename} chart/ --install --set-string image.repository=us.icr.io/${namespace}/${imagename},image.tag=${imagetag}")
+                }
+            }catch(Exception ex){
+                //print "Error in Kubectl Verify: " + ex.toString()
+                error "Stop execution: " + ex.toString()
+            }
+        }
+        
+    }
+}
