@@ -37,12 +37,14 @@ spec:
 	}
 	stages{
 		stage("Extract"){
-			try{
-				container("jnlp"){
-					checkout scm
+			steps{
+				try{
+					container("jnlp"){
+						checkout scm
+					}
+				}catch(Exception ex){
+					error "Failed extract. Reason is: " + ex.toString()
 				}
-			}catch(Exception ex){
-				error "Failed extract. Reason is: " + ex.toString()
 			}
 		}
 		stage("Build source"){}
