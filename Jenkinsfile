@@ -42,9 +42,11 @@ spec:
 	stages{
 		stage("Prepare"){
 			steps{
-				def namespace = "namespacecda"
-				def imagetag
-				def imagename = params.appName
+				script{
+					def namespace = "namespacecda"
+					def imagetag
+					def imagename = params.appName
+				}
 			}
 		}
 		stage("Extract"){
