@@ -32,9 +32,9 @@ spec:
     hostPath: 
       path: /var/run/docker.sock
       mountPath: /var/run/docker.sock
+"""
 		}
 	}
-"""
 	stages{
 		stage("Extract"){
 			try{
