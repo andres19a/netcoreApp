@@ -46,28 +46,28 @@ spec:
 		stage("Build source"){
 			steps{
 				container("netcoresdk"){
-					print "TODO
+					print "TODO"
 				}
 			}
 		}
 		stage("Build image"){
 			steps{
 				container("netcoresdk"){
-					print "TODO
+					print "TODO"
 				}
 			}
 		}
 		stage("Commit image"){
 			steps{
 				container("netcoresdk"){
-					print "TODO
+					print "TODO"
 				}
 			}
 		}
 		stage("Deploy"){
 			steps{
 				container("netcoresdk"){
-					print "TODO
+					print "TODO"
 				}
 			}
 		}
