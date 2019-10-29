@@ -16,11 +16,17 @@ spec:
       command:
       - cat
       tty: true
+      env:
+      - name: HOME
+        value: /home/jenkins
     - name: docker
       image: docker:18.06.1-ce
       command: 
       - cat
       tty: true
+      env:
+      - name: HOME
+        value: /home/jenkins
       volumeMounts:
       - mountPath: /var/run/docker.sock
         name: docker-sock
@@ -31,6 +37,9 @@ spec:
       command:
       - cat
       tty: true
+      env:
+      - name: HOME
+        value: /home/jenkins
   volumes:
   - name: docker-sock
     hostPath: 
