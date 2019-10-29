@@ -1,3 +1,6 @@
+def namespace = "namespacecda"
+def imagetag
+def imagename
 pipeline{
 	agent{
 		kubernetes{
@@ -43,13 +46,9 @@ spec:
 		stage("Prepare"){
 			steps{
 				script{
-					def namespace = "namespacecda"
-					def imagetag
-					def imagename = params.appName
+					namespace = "namespacecda"
+					imagename = params.appName
 				}
-				print "Namespace: ${namespace}"
-				print "Image Name: ${imagename}"
-				print "Image Tag: ${imagetag}"
 			}
 		}
 		stage("Extract"){
