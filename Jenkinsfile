@@ -5,6 +5,7 @@ pipeline{
 	agent{
 		kubernetes{
 			label "netcorebuild"
+			defaultContainer "jnlp"
 			yaml """
 apiVersion: v1
 kind: Pod
@@ -20,6 +21,11 @@ spec:
       command: 
       - cat
       tty: true
+      volumeMounts:
+      - mountPath: /var/run/docker.sock
+        name: docker-sock
+      - mountPath: /dockerconfig
+        name: registry-secret
     - name: helm
       image: ibmcom/microclimate-k8s-helm:v2.12.3
       command:
