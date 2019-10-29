@@ -43,10 +43,34 @@ spec:
 				}
 			}
 		}
-		stage("Build source"){}
-		stage("Build image"){}
-		stage("Commit image"){}
-		stage("Deploy"){}
-		stage("Verify"){}
+		stage("Build source"){
+			steps{
+				container("netcoresdk"){
+					print "TODO
+				}
+			}
+		}
+		stage("Build image"){
+			steps{
+				container("netcoresdk"){
+					print "TODO
+				}
+			}
+		}
+		stage("Commit image"){
+			steps{
+				container("netcoresdk"){
+					print "TODO
+				}
+			}
+		}
+		stage("Deploy"){
+			steps{
+				container("netcoresdk"){
+					print "TODO
+				}
+			}
+		}
+		//stage("Verify"){}
 	}
 }
